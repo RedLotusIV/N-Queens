@@ -2,31 +2,32 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+
 void tablereset(int n, int **board)
 {
-	for (int i = 0 ; i < n ; i++)
-		for (int j = 0 ; j < n ; j++)
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
 			board[i][j] = 0;
 }
-int	isValid(int posY, int posX, int **queens, int n)
+
+int isValid(int posY, int posX, int **queens, int n)
 {
-	for (int i = 0 ; i < n ; i++)
+	for (int i = 0; i < n; i++)
 	{
-		for(int j = 0; j < n ; j++)
+		for (int j = 0; j < n; j++)
 		{
 			if (queens[i][j] == 1 && ((posY - i == posX - j) ||
-							(posY - i == j - posX) ||
-							(posX == j) || (posY == i)))
-							{
-								return 0;
-							}
+									  (posY - i == j - posX) ||
+									  (posX == j) || (posY == i)))
+			{
+				return 0;
+			}
 		}
 	}
 	return 1;
 }
 
-
-void	mainalloc(char ****array, int n)
+void mainalloc(char ****array, int n)
 {
 	switch (n)
 	{
@@ -68,9 +69,9 @@ int recursiveSolve(int n, int **board, int x, int y)
 {
 	if (x >= n)
 		return 1;
-	for	(int i = y; i < n; i++)
+	for (int i = y; i < n; i++)
 	{
-		if(isValid(i, x, board, n) && i == 0)
+		if (isValid(i, x, board, n) && i == 0)
 		{
 			board[i][x] = 1;
 			if (recursiveSolve(n, board, x + 1, i))
@@ -84,7 +85,7 @@ int recursiveSolve(int n, int **board, int x, int y)
 	return 0;
 }
 
-char*** solveNQueens(int n, int* returnSize, int** returnColumnSizes)
+char ***solveNQueens(int n, int *returnSize, int **returnColumnSizes)
 {
 	char ***array;
 	int flag = 0;
@@ -96,24 +97,24 @@ char*** solveNQueens(int n, int* returnSize, int** returnColumnSizes)
 	*returnSize = 0;
 	mainalloc(&array, n);
 	returnColumnSizes = malloc(sizeof(int *) * n);
-    for (int l = 0; l < n ; l++)
+	for (int l = 0; l < n; l++)
 	{
-        returnColumnSizes[l] = malloc(sizeof(int) * n);
-        array[l] = malloc(sizeof(char *) * (n + 1));
-        for (int i = 0; i < n; i++)
+		returnColumnSizes[l] = malloc(sizeof(int) * n);
+		array[l] = malloc(sizeof(char *) * (n + 1));
+		for (int i = 0; i < n; i++)
 		{
-            array[l][i] = malloc(sizeof(char) * (n + 1));
-            if (i == n - 1)
+			array[l][i] = malloc(sizeof(char) * (n + 1));
+			if (i == n - 1)
 			{
-                array[l][i][n] = '\0';
-        	}
+				array[l][i][n] = '\0';
+			}
 		}
-    }
-	for (int l = 0 ; array && array[l]; l++)
+	}
+	for (int l = 0; array && array[l]; l++)
 	{
-		for (int y = 0; y < n ; y++)
+		for (int y = 0; y < n; y++)
 		{
-			for (int x = 0; x < n ; x++)
+			for (int x = 0; x < n; x++)
 			{
 				if (recursiveSolve(n, returnColumnSizes, x, y))
 				{
@@ -128,8 +129,8 @@ char*** solveNQueens(int n, int* returnSize, int** returnColumnSizes)
 						}
 					}
 					*returnSize++;
+					tablereset(n, returnColumnSizes);
 				}
-				tablereset(n, returnColumnSizes);
 			}
 		}
 	}
@@ -142,11 +143,11 @@ int main()
 	int returnSizes;
 	int n = 4;
 	char ***solved = solveNQueens(n, &returnSizes, returnColumnSizes);
-	for(int l = 0 ; solved && solved[l]; l++)
+	for (int l = 0; solved && solved[l]; l++)
 	{
 		for (int i = 0; i < n; i++)
 		{
-           	printf("%s", solved[l][i]);
+			printf("%s", solved[l][i]);
 			printf(",");
 		}
 		printf("\n");
